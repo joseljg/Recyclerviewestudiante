@@ -16,6 +16,22 @@ public class ListaEstudiantesAdapter extends RecyclerView.Adapter<EstudianteView
    private ArrayList<Estudiante> estudiantes;
    private LayoutInflater le_inflater;
 
+    public Context getC() {
+        return c;
+    }
+
+    public void setC(Context c) {
+        this.c = c;
+    }
+
+    public ArrayList<Estudiante> getEstudiantes() {
+        return estudiantes;
+    }
+
+    public void setEstudiantes(ArrayList<Estudiante> estudiantes) {
+        this.estudiantes = estudiantes;
+    }
+
     public ListaEstudiantesAdapter(Context context, ArrayList<Estudiante> estudiantes) {
         this.c = context;
         this.estudiantes = estudiantes;

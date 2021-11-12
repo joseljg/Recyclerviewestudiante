@@ -1,12 +1,16 @@
 package es.joseljg.recyclerviewestudiante;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +38,46 @@ public class MainActivity extends AppCompatActivity {
     adaptadorEstudiantes = new ListaEstudiantesAdapter(this,estudiantes);
     rv_estudiantes.setAdapter(adaptadorEstudiantes);
     rv_estudiantes.setLayoutManager(new LinearLayoutManager(this));
+    //-----------------------------------------------------------------------------
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT |
+                ItemTouchHelper.DOWN | ItemTouchHelper.UP, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int from = viewHolder.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                Collections.swap(estudiantes, from, to);
+                adaptadorEstudiantes.notifyItemMoved(from, to);
+                return true;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if(direction == ItemTouchHelper.LEFT)
+                {
+                    mostrarToast("ha pulsado izquierda");
+                    // Ciudad c = ciudades.get(viewHolder.getAdapterPosition());
+                    // CiudadController.borrarCiudad(c);
+                    estudiantes.remove(viewHolder.getAdapterPosition());
+                    adaptadorEstudiantes.notifyItemRemoved(viewHolder.getAdapterPosition());
+                }
+                if(direction == ItemTouchHelper.RIGHT)
+                {
+                    mostrarToast("ha pulsado derecha");
+                    estudiantes.remove(viewHolder.getAdapterPosition());
+                    adaptadorEstudiantes.notifyItemRemoved(viewHolder.getAdapterPosition());
+                }
+            }
+        });
+        helper.attachToRecyclerView(rv_estudiantes);
     }
+
+    public void mostrarEstudiante(Estudiante e) {
+        Toast.makeText(this,"dni->" + e.getDni() + "\n" + "nombre->"+ e.getNombre() + "\n"+ "fecha de nacimiento " + e.getFechan() + "\n" + "hora preferida de llamada " + e.getHorap() + "\n" + "curso->" + e.getCurso(), Toast.LENGTH_LONG).show();
+    }
+
+    private void mostrarToast(String texto) {
+        Toast.makeText(this,texto, Toast.LENGTH_SHORT).show();
+    }
+
 }
+

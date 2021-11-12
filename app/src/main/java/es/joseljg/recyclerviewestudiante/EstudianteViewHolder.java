@@ -1,5 +1,6 @@
 package es.joseljg.recyclerviewestudiante;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EstudianteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
+    public static final String EXTRA_OBJETO_ESTUDIANTE = "es.joseljg.EstudianteViewHolder.objeto";
     public ImageView img_foto =null;
     public TextView txt_dni = null;
     public TextView txt_nombre = null;
@@ -32,6 +34,10 @@ public class EstudianteViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View view) {
-
+        int posicion = getLayoutPosition();
+        Estudiante e = le_adapter.getEstudiantes().get(posicion);
+        Intent intent = new Intent(le_adapter.getC(),DetallesEstudianteActivity.class);
+        intent.putExtra(EXTRA_OBJETO_ESTUDIANTE, e);
+        le_adapter.getC().startActivity(intent);
     }
 }
